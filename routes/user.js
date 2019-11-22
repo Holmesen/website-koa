@@ -84,13 +84,8 @@ router.post('/login', async(ctx, next)=> {
     if(!ctx.request.body.pwd || !ctx.request.body.name) {
       ctx.body = '请检查用户名或密码！'
     } else {
-      // let res = await user.addUser(ctx.request.body.fieldsMap)
       let res = await user.login({pwd: ctx.request.body.pwd, name: ctx.request.body.name})
-      if(!!res && res.length>0 && res[0]['COUNT(*)']>0) {
-        ctx.body = '登录成功！'
-      } else {
-        ctx.body = '登录失败！'
-      }
+      ctx.body = res
     }
   }
 })
@@ -104,11 +99,7 @@ router.post('/signup', async(ctx, next)=> {
       ctx.body = '请传参数 userData'
     } else {
       let res = await user.signup(JSON.parse(ctx.request.body.userData))
-      if(!!res && res['affectedRows']>0) {
-        ctx.body = '注册成功！'
-      } else {
-        ctx.body = '注册失败！'
-      }
+      ctx.body = res
     }
   }
 })

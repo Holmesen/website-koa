@@ -46,11 +46,21 @@ user.deleteUser = async (conditionMap)=> {
 }
 
 user.login = async (data)=> {
-  return await userM.login(data)
+  const result = await userM.login(data)
+  if(result[0]["COUNT(*)"]>0) {
+    return {success: true, message: '登录成功！', data: null}
+  } else {
+    return {success: false, message: '登录失败！', data: null}
+  }
 }
 
 user.signup = async (data)=> {
-  return await userM.signup(data)
+  const result = await userM.signup(data)
+  if(result.affectedRows>0) {
+    return {success: true, message: '注册成功！', data: null}
+  } else {
+    return {success: false, message: '注册失败！', data: null}
+  }
 }
 
 module.exports = user
