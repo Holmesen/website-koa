@@ -19,7 +19,21 @@ function randomString(len=16) {
   return str
 }
 
+function getTheDate(gap='-') {
+  const date = new Date()
+  const y = date.getFullYear()
+  const M = date.getMonth() +1
+  const d = date.getDate()
+  const h = date.getHours()
+  const m = date.getMinutes()
+  const s = date.getSeconds()
+
+  return y+gap+((M+'').length===1?('0'+M+''):M)+gap+((d+'').length===1?('0'+d+''):d)+' '
+    +((h+'').length===1?('0'+h+''):h)+':'+((m+'').length===1?('0'+m+''):m)+':'+((s+'').length===1?('0'+s+''):s)
+}
+
 module.exports = {
   subArr2Str,
-  randomString
+  randomString,
+  getTheDate
 }

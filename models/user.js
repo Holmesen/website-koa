@@ -1,5 +1,6 @@
 const sql = require('../lib/mysql')
 const randomString = require('../utils').randomString
+const getTheDate = require('../utils').getTheDate
 
 const user = {}
 
@@ -128,7 +129,7 @@ user.login = (data)=> {
 user.signup = (data)=> {
   return sql(`INSERT INTO user(keyid, name, pwd, sex, birthday, avatar, introduction, date, updateTime)
    VALUES('${randomString(16)}' ,'${data.name||''}' ,'${data.pwd||''}' ,'${data.sex||''}' ,${data.birthday?("'"+data.birthday+"'"):null}
-    ,'${data.avatar||''}' ,'${data.introduction||''}' ,${data.date?("'"+data.date+"'"):null} , ${data.updateTime?("'"+data.updateTime+"'"):null})`)
+    ,'${data.avatar||''}' ,'${data.introduction||''}' ,'${getTheDate()}' , ${data.updateTime?("'"+data.updateTime+"'"):null})`)
 }
 
 module.exports = user
