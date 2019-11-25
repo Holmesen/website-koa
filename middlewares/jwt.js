@@ -4,7 +4,7 @@ const config = require('../config')
 
 const jwtMiddleware = koaJwt({ secret: config.secret })
 
-module.exports = function (ctx, next) {
+function decodeJWT (ctx, next) {
   // 将 token 中的数据解密后保存到 ctx 中
   try {
     if (typeof ctx.request.headers.authorization === 'string') {
@@ -17,4 +17,9 @@ module.exports = function (ctx, next) {
     throw {code: 401, message: err.message}
   }
   next()
+}
+
+module.exports = {
+  jwtMiddleware,
+  decodeJWT
 }

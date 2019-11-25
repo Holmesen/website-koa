@@ -7,10 +7,12 @@ const routes = require('./routes/public')
 const uploadRoutes = require('./routes/uploadFile')
 const userRoutes = require('./routes/user')
 const blogRoutes = require('./routes/blog')
+const testRoutes = require('./routes/test')
 
 const {loggerMiddleware} = require('./middlewares/logger')
 const {errorHandler, responseHandler} = require('./middlewares/response')
 const {corsHandler} = require('./middlewares/cors')
+const {jwtMiddleware} = require('./middlewares/jwt')
 
 const app = new koa()
 
@@ -28,6 +30,9 @@ app.use(koaStatic(path.join(__dirname + "/public")))
 // 跨域
 app.use(koaCors(corsHandler))
 
+// JWT验证
+// app.use(jwtMiddleware.unless({ path: [/^\/public/] }))
+
 app.use(routes.routes())
 app.use(routes.allowedMethods())
 
@@ -42,6 +47,10 @@ app.use(userRoutes.allowedMethods())
 // 博客相关路由
 app.use(blogRoutes.routes())
 app.use(blogRoutes.allowedMethods())
+
+// 测试用路由
+app.use(testRoutes.routes())
+app.use(testRoutes.allowedMethods())
 
 // Response
 // app.use(responseHandler)

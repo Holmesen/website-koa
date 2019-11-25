@@ -1,4 +1,6 @@
 const userM = require('../models').user
+const jwt = require('jsonwebtoken')
+const config = require('../config')
 
 const user = {}
 
@@ -48,7 +50,8 @@ user.deleteUser = async (conditionMap)=> {
 user.login = async (data)=> {
   const result = await userM.login(data)
   if(result[0]["COUNT(*)"]>0) {
-    return {success: true, message: '登录成功！', data: null}
+    var token = jwt.sign({name: data.name||'', pwd: data.pwd||''}, config.secret)
+    return {success: true, message: '登录成功！', data: { token }}
   } else {
     return {success: false, message: '登录失败！', data: null}
   }
