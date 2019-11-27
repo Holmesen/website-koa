@@ -78,6 +78,7 @@ user.signup = async (data)=> {
 }
 
 user.getInfo = async (jwtData)=> {
+  jwtData.pwd = Decrypt(jwtData.pwd)
   const result = await userM.getInfo(jwtData)
   if(result && result.length>0) {
     return {success: true, message: '获取用户信息成功！', data: result}

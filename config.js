@@ -10,5 +10,5 @@ module.exports = {
 
   logPath: path.resolve(__dirname, './logs/koa-log.log'),
 
-  secret: 'secret'
+  secret: 'qn0vLA1gwCIrzxoO'
 }
