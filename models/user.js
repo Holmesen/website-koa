@@ -123,13 +123,18 @@ user.delete = (conditionMap)=> {
 }
 
 user.login = (data)=> {
-  return sql(`SELECT COUNT(*) FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
+  // return sql(`SELECT COUNT(*) FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
+  return sql(`SELECT name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
 }
 
 user.signup = (data)=> {
   return sql(`INSERT INTO user(keyid, name, pwd, sex, birthday, avatar, introduction, date, updateTime)
    VALUES('${randomString(16)}' ,'${data.name||''}' ,'${data.pwd||''}' ,'${data.sex||''}' ,${data.birthday?("'"+data.birthday+"'"):null}
     ,'${data.avatar||''}' ,'${data.introduction||''}' ,'${getTheDate()}' , ${data.updateTime?("'"+data.updateTime+"'"):null})`)
+}
+
+user.getInfo = (data)=> {
+  return sql(`SELECT name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
 }
 
 module.exports = user

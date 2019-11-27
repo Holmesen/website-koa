@@ -1,6 +1,8 @@
 const userM = require('../models').user
 const jwt = require('jsonwebtoken')
 const config = require('../config')
+const Decrypt = require('../utils/crypto').Decrypt
+const Encrypt = require('../utils/crypto').Encrypt
 
 const user = {}
 
@@ -48,21 +50,39 @@ user.deleteUser = async (conditionMap)=> {
 }
 
 user.login = async (data)=> {
+  data.pwd = Decrypt(data.pwd)
   const result = await userM.login(data)
-  if(result[0]["COUNT(*)"]>0) {
-    var token = jwt.sign({name: data.name||'', pwd: data.pwd||''}, config.secret)
-    return {success: true, message: '登录成功！', data: { token }}
+  if(result && result.length>0) {
+    var token = jwt.sign(
+      {name: data.name||'', pwd: Encrypt(data.pwd)||''}, 
+      config.secret, 
+      {
+        algorithm: 'HS256',
+        expiresIn: '2h'
+      }
+    )
+    return {success: true, message: '登录成功！', data: Object.assign({token}, result[0])}
   } else {
     return {success: false, message: '登录失败！', data: null}
   }
 }
 
 user.signup = async (data)=> {
+  data.pwd = Encrypt(data.pwd)
   const result = await userM.signup(data)
   if(result.affectedRows>0) {
     return {success: true, message: '注册成功！', data: null}
   } else {
     return {success: false, message: '注册失败！', data: null}
+  }
+}
+
+user.getInfo = async (jwtData)=> {
+  const result = await userM.getInfo(jwtData)
+  if(result && result.length>0) {
+    return {success: true, message: '获取用户信息成功！', data: result}
+  } else {
+    return {success: false, message: '获取用户信息失败！', data: null}
   }
 }
 

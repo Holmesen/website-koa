@@ -1,6 +1,9 @@
 const Router = require('koa-router')
 const router = new Router()
 const user = require('../services').user
+const {jwtMiddleware, decodeJWT} = require('../middlewares/jwt')
+
+router.prefix('/user')
 
 router.get('/getUser', async(ctx, next)=> {
   await next()
@@ -79,10 +82,10 @@ router.delete('/deleteUser', async(ctx, next)=> {
 router.post('/login', async(ctx, next)=> {
   await next()
   if(!ctx.request.body) {
-    ctx.body = '没有传入数据！'
+    ctx.body = {success: false, message: '没有传入数据！', data: null}
   } else {
     if(!ctx.request.body.pwd || !ctx.request.body.name) {
-      ctx.body = '请检查用户名或密码！'
+      ctx.body = ctx.body = {success: false, message: '请检查用户名或密码！', data: null}
     } else {
       let res = await user.login({pwd: ctx.request.body.pwd, name: ctx.request.body.name})
       ctx.body = res
@@ -93,14 +96,25 @@ router.post('/login', async(ctx, next)=> {
 router.post('/signup', async(ctx, next)=> {
   await next()
   if(!ctx.request.body) {
-    ctx.body = '没有传入数据！'
+    ctx.body = {success: false, message: '没有传入数据！', data: null}
   } else {
     if(!ctx.request.body.userData) {
-      ctx.body = '请传参数 userData'
+      ctx.body = ctx.body = {success: false, message: '请传参数 userData', data: null}
     } else {
       let res = await user.signup(JSON.parse(ctx.request.body.userData))
       ctx.body = res
     }
+  }
+})
+
+router.get('/get-info', async(ctx, next)=> {
+  await next()
+  decodeJWT(ctx, next())
+  if(ctx.jwtData) {
+    let res = await user.getInfo(ctx.jwtData)
+    ctx.body = res
+  } else {
+    ctx.body = {success: false, message: 'token身份验证失败！', data: null}
   }
 })
 

@@ -11,12 +11,12 @@ function decodeJWT (ctx, next) {
       const token = ctx.request.headers.authorization.slice(7)
       ctx.jwtData = jwt.verify(token, config.secret)
     } else {
-      throw {code: 401, message: 'no authorization'}
+      throw {code: 401, success: false, message: 'no authorization', data: null}
     }
   } catch (err) {
-    throw {code: 401, message: err.message}
+    throw {code: 401, success:false, message: err.message, data: null}
   }
-  next()
+  next
 }
 
 module.exports = {
