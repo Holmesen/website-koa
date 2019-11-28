@@ -1,5 +1,7 @@
 const blogM = require('../models').blog
 const subArr2Str = require('../utils').subArr2Str
+const Decrypt = require('../utils/crypto').Decrypt
+const Encrypt = require('../utils/crypto').Encrypt
 
 const blog = {}
 
@@ -66,6 +68,15 @@ blog.deleteBlog = async (conditionMap)=> {
   }
   conditionMap = JSON.parse(conditionMap)
   return await blogM.deleteBlog(conditionMap)
+}
+
+blog.release = async (data)=> {
+  const result = await blogM.release(data)
+  if(result.affectedRows>0) {
+    return {success: true, message: '博客发布成功！', data: null}
+  } else {
+    return {success: false, message: '博客发布失败！', data: null}
+  }
 }
 
 module.exports = blog

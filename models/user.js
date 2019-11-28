@@ -124,7 +124,7 @@ user.delete = (conditionMap)=> {
 
 user.login = (data)=> {
   // return sql(`SELECT COUNT(*) FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
-  return sql(`SELECT name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
+  return sql(`SELECT keyid, name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
 }
 
 user.signup = (data)=> {

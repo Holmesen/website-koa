@@ -10,5 +10,7 @@ module.exports = {
 
   logPath: path.resolve(__dirname, './logs/koa-log.log'),
 
-  secret: 'qn0vLA1gwCIrzxoO'
+  secret: 'qn0vLA1gwCIrzxoO',
+
+  serverPath: 'http://localhost:' + this.port
 }

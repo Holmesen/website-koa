@@ -61,8 +61,10 @@ blog.deleteBlog = (conditionMap)=> {
   return sql(`DELETE FROM blog WHERE ${cmap}`)
 }
 
-blog.getComment = ()=> {
-  
+blog.release = (data)=> {
+  return sql(`INSERT INTO blog(keyid, category, title, ukeyid, user, date, content, views, collect, share, updateTime)
+  VALUES('${randomString(16)}' ,'${data.category||[]}' ,'${data.title||''}' ,'${data.ukeyid||''}' ,${data.user||''}
+   ,${data.date?("'"+data.date+"'"):null} ,'${data.content||''}' ,${data.views||0} , ${data.collect||0}, ${data.share||0}, ${data.updateTime?("'"+data.updateTime+"'"):null})`)
 }
 
 module.exports = blog
