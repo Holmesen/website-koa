@@ -3,6 +3,7 @@ const router = new Router()
 const blog = require('../services').blog
 const {jwtMiddleware, decodeJWT} = require('../middlewares/jwt')
 
+router.prefix('/blog')
 router.get('/getBlog', async(ctx, next)=> {
   await next()
   const query = ctx.request.query
@@ -92,6 +93,46 @@ router.post('/release', async(ctx, next)=> {
       } else {
         ctx.body = {success: false, message: 'token身份验证失败！', data: null}
       }
+    }
+  }
+})
+
+/**
+ * 根据博客id去查找博客
+ */
+router.get('/get-idlist', async(ctx, next)=> {
+  await next()
+  const query = ctx.request.query
+  if(!query) {
+    ctx.body = {success: false, message: '没有传参数！', data: null}
+  } else {
+    if(!query.blogid) {
+      ctx.body = {success: false, message: '请传参数 blogid', data: null}
+    } else {
+      let res = await blog.getBlogById(query.blogid)
+      if(res) {
+        ctx.body = res
+      } else {
+        ctx.body = {success: false, message: '博客获取失败！', data: null}
+      }
+    }
+  }
+})
+
+/**
+ * 根据条件去查找博客
+ */
+router.get('/get-list', async(ctx, next)=> {
+  await next()
+  const query = ctx.request.query
+  if(!query) {
+    ctx.body = {success: false, message: '没有传参数！', data: null}
+  } else {
+    let res = await blog.getBlog(query)
+    if(res) {
+      ctx.body = res
+    } else {
+      ctx.body = {success: false, message: '博客获取失败！', data: null}
     }
   }
 })
