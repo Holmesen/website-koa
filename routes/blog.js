@@ -84,22 +84,22 @@ router.post('/release', async(ctx, next)=> {
     ctx.body = {success: false, message: '没有传入数据！', data: null}
   } else {
     if(!ctx.request.body.blogData) {
-      ctx.body = ctx.body = {success: false, message: '请传参数 blogData', data: null}
+      ctx.body = {success: false, message: '请传参数 blogData', data: null}
     } else {
-      decodeJWT(ctx, next())
-      if(ctx.jwtData) {
-        let res = await blog.release(Object.assign(JSON.parse(ctx.request.body.blogData), {ukeyid: ctx.jwtData.keyid || ''}))
-        ctx.body = res
-      } else {
-        ctx.body = {success: false, message: 'token身份验证失败！', data: null}
-      }
+      // decodeJWT(ctx, next())
+      // if(ctx.jwtData) {
+      //   let res = await blog.release(Object.assign(JSON.parse(ctx.request.body.blogData), {ukeyid: ctx.jwtData.keyid || ''}))
+      //   ctx.body = res
+      // } else {
+      //   ctx.body = {success: false, message: 'token身份验证失败！', data: null}
+      // }
+      let res = await blog.release(JSON.parse(ctx.request.body.blogData))
+      ctx.body = res
     }
   }
 })
 
-/**
- * 根据博客id去查找博客
- */
+// 根据博客id去查找博客
 router.get('/get-idlist', async(ctx, next)=> {
   await next()
   const query = ctx.request.query
@@ -119,9 +119,7 @@ router.get('/get-idlist', async(ctx, next)=> {
   }
 })
 
-/**
- * 根据条件去查找博客
- */
+// 根据条件去查找博客
 router.get('/get-list', async(ctx, next)=> {
   await next()
   const query = ctx.request.query
@@ -133,6 +131,27 @@ router.get('/get-list', async(ctx, next)=> {
       ctx.body = res
     } else {
       ctx.body = {success: false, message: '博客获取失败！', data: null}
+    }
+  }
+})
+
+router.put('/operate', async(ctx, next)=> {
+  await next()
+  if(!ctx.request.body) {
+    ctx.body = {success: false, message: '没有传入数据！', data: null}
+  } else {
+    if(!ctx.request.body.ukeyid) {
+      ctx.body = {success: false, message: '请传操作者id', data: null}
+    }
+    if(!ctx.request.body.blogId) {
+      ctx.body = {success: false, message: '请传博客id', data: null}
+    }
+    if(!ctx.request.body.type) {
+      ctx.body = {success: false, message: '请传操作类型', data: null}
+    }
+    if(ctx.request.body.ukeyid && ctx.request.body.blogId && ctx.request.body.type) {
+      let res = await blog.operate(ctx.request.body)
+      ctx.body = res
     }
   }
 })

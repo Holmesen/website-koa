@@ -103,4 +103,16 @@ blog.getBlog = (data)=> {
   return sql(`SELECT * FROM blog WHERE ${str}`)
 }
 
+blog.operate = (data)=> {
+  // let val = ''
+  // switch(data.type) {
+  //   case 'views': val = '0'; break
+  //   case 'zan': val = '1'; break
+  //   case 'cai': val = '2'; break
+  //   case 'share': val = '3'; break
+  //   case 'collect': val = '4'; break
+  // }
+  return sql(`UPDATE blog SET ${data.type}=${data.type}+1 WHERE keyid='${data.blogId}'`)
+}
+
 module.exports = blog

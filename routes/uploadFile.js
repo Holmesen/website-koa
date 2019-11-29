@@ -30,4 +30,16 @@ router.post('/blog-image', upload('blog').single('file'), async(ctx, next)=>{
   }
 })
 
+router.post('/comment-image', upload('comment').single('file'), async(ctx, next)=>{
+  await next()
+  ctx.body = {
+    success: true,
+    msg: '博客图片上传成功！',
+    data: { 
+      name: ctx.req.file.filename,
+      path: `${serverPath}/images/comment/${ctx.req.file.filename}`
+    }
+  }
+})
+
 module.exports = router

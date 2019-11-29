@@ -103,4 +103,16 @@ blog.getBlog = async(data)=> {
   }
 }
 
+blog.operate = async(data)=> {
+  if(['views', 'zan', 'cai', 'share', 'collect'].indexOf(data.type) === -1) {
+    return {success: false, message: '操作类型错误！', data: null}
+  }
+  const result = await blogM.operate(data)
+  if(result.affectedRows>0) {
+    return {success: true, message: '操作成功！', data: null}
+  } else {
+    return {success: false, message: '操作失败！', data: null}
+  }
+}
+
 module.exports = blog

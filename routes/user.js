@@ -85,7 +85,7 @@ router.post('/login', async(ctx, next)=> {
     ctx.body = {success: false, message: '没有传入数据！', data: null}
   } else {
     if(!ctx.request.body.pwd || !ctx.request.body.name) {
-      ctx.body = ctx.body = {success: false, message: '请检查用户名或密码！', data: null}
+      ctx.body = {success: false, message: '请检查用户名或密码！', data: null}
     } else {
       let res = await user.login({pwd: ctx.request.body.pwd, name: ctx.request.body.name})
       ctx.body = res
@@ -99,7 +99,7 @@ router.post('/signup', async(ctx, next)=> {
     ctx.body = {success: false, message: '没有传入数据！', data: null}
   } else {
     if(!ctx.request.body.userData) {
-      ctx.body = ctx.body = {success: false, message: '请传参数 userData', data: null}
+      ctx.body = {success: false, message: '请传参数 userData', data: null}
     } else {
       let res = await user.signup(JSON.parse(ctx.request.body.userData))
       ctx.body = res

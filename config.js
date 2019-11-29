@@ -12,5 +12,5 @@ module.exports = {
 
   secret: 'qn0vLA1gwCIrzxoO',
 
-  serverPath: 'http://localhost:' + this.port
+  serverPath: 'http://localhost:3000'
 }
