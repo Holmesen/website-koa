@@ -123,16 +123,22 @@ router.get('/get-idlist', async(ctx, next)=> {
 router.get('/get-list', async(ctx, next)=> {
   await next()
   const query = ctx.request.query
-  if(!query) {
-    ctx.body = {success: false, message: '没有传参数！', data: null}
+  let res = await blog.getBlog(query || null)
+  if(res) {
+    ctx.body = res
   } else {
-    let res = await blog.getBlog(query)
-    if(res) {
-      ctx.body = res
-    } else {
-      ctx.body = {success: false, message: '博客获取失败！', data: null}
-    }
+    ctx.body = {success: false, message: '博客获取失败！', data: null}
   }
+  // if(!query) {
+  //   ctx.body = {success: false, message: '没有传参数！', data: null}
+  // } else {
+  //   let res = await blog.getBlog(query)
+  //   if(res) {
+  //     ctx.body = res
+  //   } else {
+  //     ctx.body = {success: false, message: '博客获取失败！', data: null}
+  //   }
+  // }
 })
 
 router.put('/operate', async(ctx, next)=> {

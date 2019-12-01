@@ -92,7 +92,7 @@ blog.getBlogById = async(data)=> {
 }
 
 blog.getBlog = async(data)=> {
-  if(data.category) {
+  if(data && data.category) {
     data.category = unescape(data.category)
   }
   const result = await blogM.getBlog(data)
