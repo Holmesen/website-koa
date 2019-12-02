@@ -66,7 +66,7 @@ const blog = {}
 blog.release = (data)=> {
   return sql(`INSERT INTO blog(keyid, category, title, ukeyid, user, date, place, weather, content, views, zan, cai, collect, share, updateTime)
   VALUES('${randomString(16)}' ,'${data.category||[]}' ,'${data.title||''}' ,'${data.ukeyid||''}' ,'${data.user||''}'
-   ,${data.date?("'"+data.date+"'"):getTheDate()} ,'${data.place||''}' ,'${data.weather||''}' ,'${data.content||''}' ,${data.views||0} ,${data.zan||0} ,${data.cai||0} , ${data.collect||0}, ${data.share||0}, ${data.updateTime?("'"+data.updateTime+"'"):null})`)
+   ,${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")} ,'${data.place||''}' ,'${data.weather||''}' ,'${data.content||''}' ,${data.views||0} ,${data.zan||0} ,${data.cai||0} , ${data.collect||0}, ${data.share||0}, ${data.updateTime?("'"+data.updateTime+"'"):null})`)
 }
 
 blog.getBlogById = (data)=> {
@@ -120,8 +120,12 @@ blog.operate = (data)=> {
 }
 
 blog.comment = (data)=> {
-  return sql(`INSERT INTO comment(keyid, tkeyid, ukeyid, user, date, content, type) 
-    VALUES('${randomString(16)}', '${data.tkeyid}', '${data.ukeyid}', '${data.user}', ${data.date?("'"+data.date+"'"):getTheDate()}, '${data.content}', '${data.type}')`)
+  return sql(`INSERT INTO comment(keyid, tkeyid, ukeyid, date, content, type) 
+    VALUES('${randomString(16)}', '${data.bkeyid}', '${data.ukeyid}', ${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")}, '${data.content}', '${data.type}')`)
+}
+
+blog.getBlogComment = (data)=> {
+  return sql(`SELECT a.*, b.avatar, b.name FROM comment a LEFT JOIN user b ON b.keyid = a.ukeyid AND A.type='0' AND A.tkeyid='${data}'`)
 }
 
 module.exports = blog

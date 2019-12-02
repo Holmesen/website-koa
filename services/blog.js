@@ -133,4 +133,13 @@ blog.comment = async(data)=> {
   }
 }
 
+blog.getBlogComment = async(data)=> {
+  const result = await blogM.getBlogComment(data)
+  if(result && result.length>0) {
+    return {success: true, message: '获取博客评论成功！', data: result}
+  } else {
+    return {success: false, message: '获取博客评论失败！', data: null}
+  }
+}
+
 module.exports = blog

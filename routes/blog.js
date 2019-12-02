@@ -178,10 +178,6 @@ router.post('/comment', async(ctx, next)=> {
       ctx.body = {success: false, message: '请传博客id', data: null}
       return
     }
-    if(!ctx.request.body.user) {
-      ctx.body = {success: false, message: '请传评论者名称', data: null}
-      return
-    }
     if(!ctx.request.body.content) {
       ctx.body = {success: false, message: '请传评论内容', data: null}
       return
@@ -192,6 +188,25 @@ router.post('/comment', async(ctx, next)=> {
     }
     let res = await blog.comment(ctx.request.body)
     ctx.body = res
+  }
+})
+
+router.get('/get-comment', async(ctx, next)=> {
+  await next()
+  const query = ctx.request.query
+  if(!query) {
+    ctx.body = {success: false, message: '没有传参数！', data: null}
+  } else {
+    if(!query.blogId) {
+      ctx.body = {success: false, message: '请传博客id ！', data: null}
+      return
+    }
+    let res = await blog.getBlogComment(query.blogId)
+    if(res) {
+      ctx.body = res
+    } else {
+      ctx.body = {success: false, message: '博客评论获取失败！', data: null}
+    }
   }
 })
 
