@@ -148,17 +148,50 @@ router.put('/operate', async(ctx, next)=> {
   } else {
     if(!ctx.request.body.ukeyid) {
       ctx.body = {success: false, message: '请传操作者id', data: null}
+      return
     }
     if(!ctx.request.body.blogId) {
       ctx.body = {success: false, message: '请传博客id', data: null}
+      return
     }
     if(!ctx.request.body.type) {
       ctx.body = {success: false, message: '请传操作类型', data: null}
+      return
     }
     if(ctx.request.body.ukeyid && ctx.request.body.blogId && ctx.request.body.type) {
       let res = await blog.operate(ctx.request.body)
       ctx.body = res
     }
+  }
+})
+
+router.post('/comment', async(ctx, next)=> {
+  await next()
+  if(!ctx.request.body) {
+    ctx.body = {success: false, message: '没有传入数据！', data: null}
+  } else {
+    if(!ctx.request.body.ukeyid) {
+      ctx.body = {success: false, message: '请传操作者id', data: null}
+      return
+    }
+    if(!ctx.request.body.bkeyid) {
+      ctx.body = {success: false, message: '请传博客id', data: null}
+      return
+    }
+    if(!ctx.request.body.user) {
+      ctx.body = {success: false, message: '请传评论者名称', data: null}
+      return
+    }
+    if(!ctx.request.body.content) {
+      ctx.body = {success: false, message: '请传评论内容', data: null}
+      return
+    }
+    if(!ctx.request.body.type) {
+      ctx.body = {success: false, message: '请传评论的对象类型', data: null}
+      return
+    }
+    let res = await blog.comment(ctx.request.body)
+    ctx.body = res
   }
 })
 

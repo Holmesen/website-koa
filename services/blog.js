@@ -85,6 +85,9 @@ blog.getBlogById = async(data)=> {
   data = data.split(",")
   const result = await blogM.getBlogById(data)
   if(result && result.length>0) {
+    result.forEach(el => {
+      el.category = el.category.split(',')
+    })
     return {success: true, message: '获取博客成功！', data: result}
   } else {
     return {success: false, message: '获取博客失败！', data: null}
@@ -97,6 +100,9 @@ blog.getBlog = async(data)=> {
   }
   const result = await blogM.getBlog(data)
   if(result && result.length>0) {
+    result.forEach(el => {
+      el.category = el.category.split(',')
+    })
     return {success: true, message: '获取博客成功！', data: result}
   } else {
     return {success: false, message: '获取博客失败！', data: null}
@@ -112,6 +118,18 @@ blog.operate = async(data)=> {
     return {success: true, message: '操作成功！', data: null}
   } else {
     return {success: false, message: '操作失败！', data: null}
+  }
+}
+
+blog.comment = async(data)=> {
+  // if(['blog', 'life'].indexOf(data.type) === -1) {
+  //   return {success: false, message: '操作类型错误！', data: null}
+  // }
+  const result = await blogM.comment(data)
+  if(result.affectedRows>0) {
+    return {success: true, message: '评论成功！', data: null}
+  } else {
+    return {success: false, message: '评论失败！', data: null}
   }
 }
 
