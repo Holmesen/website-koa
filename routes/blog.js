@@ -210,4 +210,23 @@ router.get('/get-comment', async(ctx, next)=> {
   }
 })
 
+router.get('/get-record', async(ctx, next)=> {
+  await next()
+  const query = ctx.request.query
+  if(!query) {
+    ctx.body = {success: false, message: '没有传参数！', data: null}
+  } else {
+    if(!query.blogId) {
+      ctx.body = {success: false, message: '请传博客id ！', data: null}
+      return
+    }
+    let res = await blog.getBlogRecord(query)
+    if(res) {
+      ctx.body = res
+    } else {
+      ctx.body = {success: false, message: '', data: null}
+    }
+  }
+})
+
 module.exports = router

@@ -122,16 +122,16 @@ blog.getBlogComment = (data)=> {
 
 blog.record = (data)=> {
   return sql(`INSERT INTO record(keyid, tkeyid, ukeyid, type, date) 
-    VALUES('${randomString(16)}', '${data.bkeyid}', '${data.ukeyid}', '${data.type}', ${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")})`)
+    VALUES('${randomString(16)}', '${data.bkeyid || data.blogId}', '${data.ukeyid}', '${data.type}', ${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")})`)
 }
 
 blog.getRecord = (data)=> {
   let str = ''
   if(data.ukeyid) {
-    str += ` ukeyid='${data.user}' AND`
+    str += ` ukeyid='${data.ukeyid}' AND`
   }
-  if(data.bkeyid) {
-    str += ` tkeyid='${data.bkeyid}' AND`
+  if(data.bkeyid || data.blogId) {
+    str += ` tkeyid='${data.bkeyid || data.blogId}' AND`
   }
   if(data.type) {
     str += ` type='${data.type}' AND`

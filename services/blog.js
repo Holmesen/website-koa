@@ -137,10 +137,19 @@ blog.comment = async(data)=> {
 
 blog.getBlogComment = async(data)=> {
   const result = await blogM.getBlogComment(data)
-  if(result && result.length>0) {
+  if(result) {
     return {success: true, message: '获取博客评论成功！', data: result}
   } else {
     return {success: false, message: '获取博客评论失败！', data: null}
+  }
+}
+
+blog.getBlogRecord = async(data)=> {
+  const result = await blogM.getRecord(data)
+  if(result) {
+    return {success: true, message: '', data: result}
+  } else {
+    return {success: false, message: '', data: null}
   }
 }
 
