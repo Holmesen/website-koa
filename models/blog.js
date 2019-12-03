@@ -75,7 +75,7 @@ blog.getBlogById = (data)=> {
     str += ` keyid='${item.trim()}' OR`
   })
   str = str.substring(0,str.length-2)
-  return sql(`SELECT * FROM blog WHERE ${str}`)
+  return sql(`SELECT * FROM blog WHERE ${str} ORDER BY date ASC`)
 }
 
 blog.getBlog = (data)=> {
@@ -104,18 +104,10 @@ blog.getBlog = (data)=> {
       str = str.substring(0,str.length-3)
     }
   }
-  return sql(`SELECT * FROM blog ${str? 'WHERE '+str : ''}`)
+  return sql(`SELECT * FROM blog ${str? 'WHERE '+str : ''} ORDER BY date ASC`)
 }
 
 blog.operate = (data)=> {
-  // let val = ''
-  // switch(data.type) {
-  //   case 'views': val = '0'; break
-  //   case 'zan': val = '1'; break
-  //   case 'cai': val = '2'; break
-  //   case 'share': val = '3'; break
-  //   case 'collect': val = '4'; break
-  // }
   return sql(`UPDATE blog SET ${data.type}=${data.type}+1 WHERE keyid='${data.blogId}'`)
 }
 
@@ -125,7 +117,29 @@ blog.comment = (data)=> {
 }
 
 blog.getBlogComment = (data)=> {
-  return sql(`SELECT a.*, b.avatar, b.name FROM comment a LEFT JOIN user b ON b.keyid = a.ukeyid AND A.type='0' AND A.tkeyid='${data}'`)
+  return sql(`SELECT a.*, b.name, b.avatar FROM comment a LEFT JOIN user b ON b.keyid = a.ukeyid WHERE a.tkeyid = '${data}' AND a.type = '0' ORDER BY a.date ASC`)
+}
+
+blog.record = (data)=> {
+  return sql(`INSERT INTO record(keyid, tkeyid, ukeyid, type, date) 
+    VALUES('${randomString(16)}', '${data.bkeyid}', '${data.ukeyid}', '${data.type}', ${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")})`)
+}
+
+blog.getRecord = (data)=> {
+  let str = ''
+  if(data.ukeyid) {
+    str += ` ukeyid='${data.user}' AND`
+  }
+  if(data.bkeyid) {
+    str += ` tkeyid='${data.bkeyid}' AND`
+  }
+  if(data.type) {
+    str += ` type='${data.type}' AND`
+  }
+  if(data.bkeyid || data.ukeyid || data.type) {
+    str = str.substring(0,str.length-3)
+  }
+  return sql(`SELECT * FROM record ${str? 'WHERE '+str : ''} ORDER BY date ASC`)
 }
 
 module.exports = blog

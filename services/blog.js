@@ -99,6 +99,7 @@ blog.getBlog = async(data)=> {
     data.category = unescape(data.category)
   }
   const result = await blogM.getBlog(data)
+  // await blogM.record(data)
   if(result && result.length>0) {
     result.forEach(el => {
       el.category = el.category.split(',')
@@ -114,7 +115,8 @@ blog.operate = async(data)=> {
     return {success: false, message: '操作类型错误！', data: null}
   }
   const result = await blogM.operate(data)
-  if(result.affectedRows>0) {
+  const result2 = await blogM.record(data)
+  if(result.affectedRows>0 && result2.affectedRows>0) {
     return {success: true, message: '操作成功！', data: null}
   } else {
     return {success: false, message: '操作失败！', data: null}
