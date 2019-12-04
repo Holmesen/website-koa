@@ -1,10 +1,9 @@
 const Router = require('koa-router')
 const router = new Router()
-const blog = require('../services').blog
-const {jwtMiddleware, decodeJWT} = require('../middlewares/jwt')
+const life = require('../services').life
 
-router.prefix('/blog')
-router.get('/getBlog', async(ctx, next)=> {
+router.prefix('/life')
+router.get('/getLife', async(ctx, next)=> {
   await next()
   const query = ctx.request.query
   if(!query) {
@@ -13,7 +12,7 @@ router.get('/getBlog', async(ctx, next)=> {
     if(!query.fieldsMap) {
       ctx.body = '请传参数fieldsMap！'
     } else {
-      let res = await blog.getBlog(query.fieldsMap, query.fields || '')
+      let res = await life.getLife(query.fieldsMap, query.fields || '')
       if(res) {
         ctx.body = res
       } else {
@@ -23,7 +22,7 @@ router.get('/getBlog', async(ctx, next)=> {
   }
 })
 
-router.post('/addBlog', async(ctx, next)=> {
+router.post('/addLife', async(ctx, next)=> {
   await next()
   if(!ctx.request.body) {
     ctx.body = '没有传入数据！'
@@ -31,17 +30,17 @@ router.post('/addBlog', async(ctx, next)=> {
     if(!ctx.request.body.fieldsMap) {
       ctx.body = '传入参数有误！'
     } else {
-      let res = await blog.addBlog(ctx.request.body.fieldsMap)
+      let res = await life.addLife(ctx.request.body.fieldsMap)
       if(res) {
-        ctx.body = '添加博客成功！'
+        ctx.body = '添加记事成功！'
       } else {
-        ctx.body = '添加博客失败！'
+        ctx.body = '添加记事失败！'
       }
     }
   }
 })
 
-router.put('/updateBlog', async(ctx, next)=> {
+router.put('/updateLife', async(ctx, next)=> {
   await next()
   if(!ctx.request.body) {
     ctx.body = '没有传入数据！'
@@ -49,17 +48,17 @@ router.put('/updateBlog', async(ctx, next)=> {
     if(!ctx.request.body.fieldsMap || !ctx.request.body.conditionsMap) {
       ctx.body = '传入参数有误！'
     } else {
-      let res = await blog.updateBlog(ctx.request.body.fieldsMap, ctx.request.body.conditionsMap)
+      let res = await life.updateLife(ctx.request.body.fieldsMap, ctx.request.body.conditionsMap)
       if(res) {
-        ctx.body = '修改博客信息成功！'
+        ctx.body = '修改记事信息成功！'
       } else {
-        ctx.body = '修改博客信息失败！'
+        ctx.body = '修改记事信息失败！'
       }
     }
   }
 })
 
-router.delete('/deleteBlog', async(ctx, next)=> {
+router.delete('/deleteLife', async(ctx, next)=> {
   await next()
   const query = ctx.request.query
   if(!query) {
@@ -68,11 +67,11 @@ router.delete('/deleteBlog', async(ctx, next)=> {
     if(!query.conditionMap) {
       ctx.body = '请传参数conditionMap！'
     } else {
-      let res = await blog.deleteBlog(query.conditionMap)
+      let res = await life.deleteLife(query.conditionMap)
       if(res) {
-        ctx.body = '删除博客成功！'
+        ctx.body = '删除记事成功！'
       } else {
-        ctx.body = '删除博客失败！'
+        ctx.body = '删除记事失败！'
       }
     }
   }
@@ -83,60 +82,60 @@ router.post('/release', async(ctx, next)=> {
   if(!ctx.request.body) {
     ctx.body = {success: false, message: '没有传入数据！', data: null}
   } else {
-    if(!ctx.request.body.blogData) {
-      ctx.body = {success: false, message: '请传参数 blogData', data: null}
+    if(!ctx.request.body.lifeData) {
+      ctx.body = {success: false, message: '请传参数 lifeData', data: null}
     } else {
       // decodeJWT(ctx, next())
       // if(ctx.jwtData) {
-      //   let res = await blog.release(Object.assign(JSON.parse(ctx.request.body.blogData), {ukeyid: ctx.jwtData.keyid || ''}))
+      //   let res = await life.release(Object.assign(JSON.parse(ctx.request.body.lifeData), {ukeyid: ctx.jwtData.keyid || ''}))
       //   ctx.body = res
       // } else {
       //   ctx.body = {success: false, message: 'token身份验证失败！', data: null}
       // }
-      let res = await blog.release(JSON.parse(ctx.request.body.blogData))
+      let res = await life.release(JSON.parse(ctx.request.body.lifeData))
       ctx.body = res
     }
   }
 })
 
-// 根据博客id去查找博客
+// 根据记事id去查找记事
 router.get('/get-idlist', async(ctx, next)=> {
   await next()
   const query = ctx.request.query
   if(!query) {
     ctx.body = {success: false, message: '没有传参数！', data: null}
   } else {
-    if(!query.blogid) {
-      ctx.body = {success: false, message: '请传参数 blogid', data: null}
+    if(!query.lifeid) {
+      ctx.body = {success: false, message: '请传参数 lifeid', data: null}
     } else {
-      let res = await blog.getBlogById(query.blogid)
+      let res = await life.getLifeById(query.lifeid)
       if(res) {
         ctx.body = res
       } else {
-        ctx.body = {success: false, message: '博客获取失败！', data: null}
+        ctx.body = {success: false, message: '记事获取失败！', data: null}
       }
     }
   }
 })
 
-// 根据条件去查找博客
+// 根据条件去查找记事
 router.get('/get-list', async(ctx, next)=> {
   await next()
   const query = ctx.request.query
-  let res = await blog.getBlog(query || null)
+  let res = await life.getLife(query || null)
   if(res) {
     ctx.body = res
   } else {
-    ctx.body = {success: false, message: '博客获取失败！', data: null}
+    ctx.body = {success: false, message: '记事获取失败！', data: null}
   }
   // if(!query) {
   //   ctx.body = {success: false, message: '没有传参数！', data: null}
   // } else {
-  //   let res = await blog.getBlog(query)
+  //   let res = await life.getLife(query)
   //   if(res) {
   //     ctx.body = res
   //   } else {
-  //     ctx.body = {success: false, message: '博客获取失败！', data: null}
+  //     ctx.body = {success: false, message: '记事获取失败！', data: null}
   //   }
   // }
 })
@@ -150,16 +149,16 @@ router.put('/operate', async(ctx, next)=> {
       ctx.body = {success: false, message: '请传操作者id', data: null}
       return
     }
-    if(!ctx.request.body.blogId) {
-      ctx.body = {success: false, message: '请传博客id', data: null}
+    if(!ctx.request.body.lifeId) {
+      ctx.body = {success: false, message: '请传记事id', data: null}
       return
     }
     if(!ctx.request.body.type) {
       ctx.body = {success: false, message: '请传操作类型', data: null}
       return
     }
-    if(ctx.request.body.ukeyid && ctx.request.body.blogId && ctx.request.body.type) {
-      let res = await blog.operate(ctx.request.body)
+    if(ctx.request.body.ukeyid && ctx.request.body.lifeId && ctx.request.body.type) {
+      let res = await life.operate(ctx.request.body)
       ctx.body = res
     }
   }
@@ -174,8 +173,8 @@ router.post('/comment', async(ctx, next)=> {
       ctx.body = {success: false, message: '请传操作者id', data: null}
       return
     }
-    if(!ctx.request.body.bkeyid) {
-      ctx.body = {success: false, message: '请传博客id', data: null}
+    if(!ctx.request.body.lkeyid) {
+      ctx.body = {success: false, message: '请传记事id', data: null}
       return
     }
     if(!ctx.request.body.content) {
@@ -186,7 +185,7 @@ router.post('/comment', async(ctx, next)=> {
       ctx.body = {success: false, message: '请传评论的对象类型', data: null}
       return
     }
-    let res = await blog.comment(ctx.request.body)
+    let res = await life.comment(ctx.request.body)
     ctx.body = res
   }
 })
@@ -197,15 +196,15 @@ router.get('/get-comment', async(ctx, next)=> {
   if(!query) {
     ctx.body = {success: false, message: '没有传参数！', data: null}
   } else {
-    if(!query.blogId) {
-      ctx.body = {success: false, message: '请传博客id ！', data: null}
+    if(!query.lifeId) {
+      ctx.body = {success: false, message: '请传记事id ！', data: null}
       return
     }
-    let res = await blog.getBlogComment(query.blogId)
+    let res = await life.getLifeComment(query.lifeId)
     if(res) {
       ctx.body = res
     } else {
-      ctx.body = {success: false, message: '博客评论获取失败！', data: null}
+      ctx.body = {success: false, message: '记事评论获取失败！', data: null}
     }
   }
 })
@@ -216,11 +215,11 @@ router.get('/get-record', async(ctx, next)=> {
   if(!query) {
     ctx.body = {success: false, message: '没有传参数！', data: null}
   } else {
-    if(!query.bkeyid && !query.blogId && !query.ckeyid) {
-      ctx.body = {success: false, message: '请传博客id ！', data: null}
+    if(!query.lkeyid && !query.lifeId && !query.ckeyid) {
+      ctx.body = {success: false, message: '请传记事id ！', data: null}
       return
     }
-    let res = await blog.getBlogRecord(query)
+    let res = await life.getLifeRecord(query)
     if(res) {
       ctx.body = res
     } else {
@@ -235,15 +234,15 @@ router.get('/comment-record', async(ctx, next)=> {
   if(!query) {
     ctx.body = {success: false, message: '没有传参数！', data: null}
   } else {
-    if(!query.bkeyid && !query.blogId) {
-      ctx.body = {success: false, message: '请传博客id ！', data: null}
+    if(!query.lkeyid && !query.lifeId) {
+      ctx.body = {success: false, message: '请传记事id ！', data: null}
       return
     }
     if(!query.ukeyid) {
       ctx.body = {success: false, message: '请传操作者id', data: null}
       return
     }
-    let res = await blog.getCommentRecord(query)
+    let res = await life.getCommentRecord(query)
     if(res) {
       ctx.body = res
     } else {
@@ -269,7 +268,7 @@ router.post('/operate-comment', async(ctx, next)=> {
       ctx.body = {success: false, message: '请传操作类型', data: null}
       return
     }
-    let res = await blog.operateComment(ctx.request.body)
+    let res = await life.operateComment(ctx.request.body)
     ctx.body = res
   }
 })

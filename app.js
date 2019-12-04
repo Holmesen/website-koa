@@ -7,6 +7,7 @@ const routes = require('./routes/public')
 const uploadRoutes = require('./routes/uploadFile')
 const userRoutes = require('./routes/user')
 const blogRoutes = require('./routes/blog')
+const lifeRoutes = require('./routes/life')
 const testRoutes = require('./routes/test')
 
 const {loggerMiddleware} = require('./middlewares/logger')
@@ -47,6 +48,10 @@ app.use(userRoutes.allowedMethods())
 // 博客相关路由
 app.use(blogRoutes.routes())
 app.use(blogRoutes.allowedMethods())
+
+// 生活记事相关路由
+app.use(lifeRoutes.routes())
+app.use(lifeRoutes.allowedMethods())
 
 // 测试用路由
 app.use(testRoutes.routes())
