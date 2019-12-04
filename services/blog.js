@@ -115,7 +115,29 @@ blog.operate = async(data)=> {
     return {success: false, message: '操作类型错误！', data: null}
   }
   const result = await blogM.operate(data)
-  const result2 = await blogM.record(data)
+  let result2 = null
+  if(!!data.tag && data.tag === "0") {
+    result2 = await blogM.deleteRecord(data)
+  } else {
+    result2 = await blogM.record(data)
+  }
+  if(result.affectedRows>0 && result2.affectedRows>0) {
+    return {success: true, message: '操作成功！', data: null}
+  } else {
+    return {success: false, message: '操作失败！', data: null}
+  }
+}
+blog.operateComment = async(data)=> {
+  if(['zan', 'cai'].indexOf(data.type) === -1) {
+    return {success: false, message: '操作类型错误！', data: null}
+  }
+  const result = await blogM.operateComment(data)
+  let result2 = null
+  if(!!data.tag && data.tag === "0") {
+    result2 = await blogM.deleteRecord(data)
+  } else {
+    result2 = await blogM.record(data)
+  }
   if(result.affectedRows>0 && result2.affectedRows>0) {
     return {success: true, message: '操作成功！', data: null}
   } else {
@@ -146,6 +168,15 @@ blog.getBlogComment = async(data)=> {
 
 blog.getBlogRecord = async(data)=> {
   const result = await blogM.getRecord(data)
+  if(result) {
+    return {success: true, message: '', data: result}
+  } else {
+    return {success: false, message: '', data: null}
+  }
+}
+
+blog.getCommentRecord = async(data)=> {
+  const result = await blogM.getCommentRecord(data)
   if(result) {
     return {success: true, message: '', data: result}
   } else {

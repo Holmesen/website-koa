@@ -216,7 +216,7 @@ router.get('/get-record', async(ctx, next)=> {
   if(!query) {
     ctx.body = {success: false, message: '没有传参数！', data: null}
   } else {
-    if(!query.blogId) {
+    if(!data.bkeyid && !data.blogId && !data.ckeyid) {
       ctx.body = {success: false, message: '请传博客id ！', data: null}
       return
     }
@@ -226,6 +226,51 @@ router.get('/get-record', async(ctx, next)=> {
     } else {
       ctx.body = {success: false, message: '', data: null}
     }
+  }
+})
+
+router.get('/comment-record', async(ctx, next)=> {
+  await next()
+  const query = ctx.request.query
+  if(!query) {
+    ctx.body = {success: false, message: '没有传参数！', data: null}
+  } else {
+    if(!query.bkeyid && !query.blogId) {
+      ctx.body = {success: false, message: '请传博客id ！', data: null}
+      return
+    }
+    if(!query.ukeyid) {
+      ctx.body = {success: false, message: '请传操作者id', data: null}
+      return
+    }
+    let res = await blog.getCommentRecord(query)
+    if(res) {
+      ctx.body = res
+    } else {
+      ctx.body = {success: false, message: '', data: null}
+    }
+  }
+})
+
+router.post('/operate-comment', async(ctx, next)=> {
+  await next()
+  if(!ctx.request.body) {
+    ctx.body = {success: false, message: '没有传入数据！', data: null}
+  } else {
+    if(!ctx.request.body.ukeyid) {
+      ctx.body = {success: false, message: '请传操作者id', data: null}
+      return
+    }
+    if(!ctx.request.body.ckeyid) {
+      ctx.body = {success: false, message: '请传该条评论的id', data: null}
+      return
+    }
+    if(!ctx.request.body.type) {
+      ctx.body = {success: false, message: '请传操作类型', data: null}
+      return
+    }
+    let res = await blog.operateComment(ctx.request.body)
+    ctx.body = res
   }
 })
 

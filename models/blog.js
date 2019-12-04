@@ -108,7 +108,11 @@ blog.getBlog = (data)=> {
 }
 
 blog.operate = (data)=> {
-  return sql(`UPDATE blog SET ${data.type}=${data.type}+1 WHERE keyid='${data.blogId}'`)
+  return sql(`UPDATE blog SET ${data.type}=${data.type}${data.tag==='0'?'-':'+'}1 WHERE keyid='${data.blogId}'`)
+}
+
+blog.operateComment = (data)=> {
+  return sql(`UPDATE comment SET ${data.type}=${data.type}${data.tag==='0'?'-':'+'}1 WHERE keyid='${data.ckeyid}'`)
 }
 
 blog.comment = (data)=> {
@@ -122,7 +126,7 @@ blog.getBlogComment = (data)=> {
 
 blog.record = (data)=> {
   return sql(`INSERT INTO record(keyid, tkeyid, ukeyid, type, date) 
-    VALUES('${randomString(16)}', '${data.bkeyid || data.blogId}', '${data.ukeyid}', '${data.type}', ${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")})`)
+    VALUES('${randomString(16)}', '${data.bkeyid || data.blogId || data.ckeyid}', '${data.ukeyid}', '${data.type}', ${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")})`)
 }
 
 blog.getRecord = (data)=> {
@@ -130,8 +134,8 @@ blog.getRecord = (data)=> {
   if(data.ukeyid) {
     str += ` ukeyid='${data.ukeyid}' AND`
   }
-  if(data.bkeyid || data.blogId) {
-    str += ` tkeyid='${data.bkeyid || data.blogId}' AND`
+  if(data.bkeyid || data.blogId || data.ckeyid) {
+    str += ` tkeyid='${data.bkeyid || data.blogId || data.ckeyid}' AND`
   }
   if(data.type) {
     str += ` type='${data.type}' AND`
@@ -140,6 +144,15 @@ blog.getRecord = (data)=> {
     str = str.substring(0,str.length-3)
   }
   return sql(`SELECT * FROM record ${str? 'WHERE '+str : ''} ORDER BY date ASC`)
+}
+
+blog.getCommentRecord = (data)=> {
+  return sql(`SELECT * FROM record WHERE tkeyid IN (SELECT keyid FROM comment WHERE tkeyid='${data.bkeyid || data.blogId}') AND ukeyid='${data.ukeyid}'`)
+  // return sql(`SELECT * FROM record WHERE tkeyid IN (SELECT keyid FROM comment WHERE tkeyid='${data.bkeyid || data.blogId}')`)
+}
+
+blog.deleteRecord = (data)=> {
+  return sql(`DELETE FROM record WHERE tkeyid='${data.bkeyid || data.blogId || data.ckeyid}' AND ukeyid='${data.ukeyid}' AND type='${data.type}'`)
 }
 
 module.exports = blog
