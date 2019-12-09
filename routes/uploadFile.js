@@ -13,7 +13,7 @@ router.post('/avatar', upload('avatar').single('file'), async(ctx, next)=>{
     message: '头像上传成功！',
     data: { 
       name: ctx.req.file.filename,
-      path: `${serverPath}/images/avatar/${ctx.req.file.filename}`
+      path: `${serverPath}/images/avatar${ctx.request.query.keyid?'/'+ctx.request.query.keyid:''}/${ctx.req.file.filename}`
     }
   }
 })
@@ -25,7 +25,7 @@ router.post('/blog-image', upload('blog').single('file'), async(ctx, next)=>{
     message: '博客图片上传成功！',
     data: { 
       name: ctx.req.file.filename,
-      path: `${serverPath}/images/blog/${ctx.req.file.filename}`
+      path: `${serverPath}/images/blog${ctx.request.query.keyid?'/'+ctx.request.query.keyid:''}/${ctx.req.file.filename}`
     }
   }
 })
@@ -37,7 +37,7 @@ router.post('/life-image', upload('life').single('file'), async(ctx, next)=>{
     message: '记事图片上传成功！',
     data: { 
       name: ctx.req.file.filename,
-      path: `${serverPath}/images/life/${ctx.req.file.filename}`
+      path: `${serverPath}/images/life${ctx.request.query.keyid?'/'+ctx.request.query.keyid:''}/${ctx.req.file.filename}`
     }
   }
 })
@@ -49,7 +49,7 @@ router.post('/comment-image', upload('comment').single('file'), async(ctx, next)
     message: '博客图片上传成功！',
     data: { 
       name: ctx.req.file.filename,
-      path: `${serverPath}/images/comment/${ctx.req.file.filename}`
+      path: `${serverPath}/images/comment${ctx.request.query.keyid?'/'+ctx.request.query.keyid:''}/${ctx.req.file.filename}`
     }
   }
 })
@@ -61,7 +61,7 @@ router.post('/album-image', upload('album').single('file'), async(ctx, next)=>{
     message: '相册上传成功！',
     data: { 
       name: ctx.req.file.filename,
-      path: `${serverPath}/images/album/${ctx.request.query.ukeyid || 'none'}/${ctx.req.file.filename}`
+      path: `${serverPath}/images/album${ctx.request.query.keyid?'/'+ctx.request.query.keyid:''}/${ctx.req.file.filename}`
     }
   }
 })
