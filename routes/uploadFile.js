@@ -54,4 +54,16 @@ router.post('/comment-image', upload('comment').single('file'), async(ctx, next)
   }
 })
 
+router.post('/album-image', upload('album').single('file'), async(ctx, next)=>{
+  await next()
+  ctx.body = {
+    success: true,
+    message: '相册上传成功！',
+    data: { 
+      name: ctx.req.file.filename,
+      path: `${serverPath}/images/album/${ctx.request.query.ukeyid || 'none'}/${ctx.req.file.filename}`
+    }
+  }
+})
+
 module.exports = router

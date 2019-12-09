@@ -90,6 +90,9 @@ blog.getBlogById = async(data)=> {
     })
     return {success: true, message: '获取博客成功！', data: result}
   } else {
+    if(result.length === 0) {
+      return {success: true, message: '博客为空！', data: []}
+    }
     return {success: false, message: '获取博客失败！', data: null}
   }
 }
@@ -106,6 +109,9 @@ blog.getBlog = async(data)=> {
     })
     return {success: true, message: '获取博客成功！', data: result}
   } else {
+    if(result.length === 0) {
+      return {success: true, message: '博客为空！', data: []}
+    }
     return {success: false, message: '获取博客失败！', data: null}
   }
 }

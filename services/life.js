@@ -25,6 +25,9 @@ life.getLifeById = async(data)=> {
     })
     return {success: true, message: '获取记事成功！', data: result}
   } else {
+    if(result.length === 0) {
+      return {success: true, message: '记事为空！', data: []}
+    }
     return {success: false, message: '获取记事失败！', data: null}
   }
 }
@@ -41,6 +44,9 @@ life.getLife = async(data)=> {
     })
     return {success: true, message: '获取记事成功！', data: result}
   } else {
+    if(result.length === 0) {
+      return {success: true, message: '记事为空！', data: []}
+    }
     return {success: false, message: '获取记事失败！', data: null}
   }
 }
