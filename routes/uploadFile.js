@@ -61,7 +61,7 @@ router.post('/album-image', upload('album').single('file'), async(ctx, next)=>{
     message: '相册上传成功！',
     data: { 
       name: ctx.req.file.filename,
-      path: `${serverPath}/images/album${ctx.request.query.keyid?'/'+ctx.request.query.keyid:''}/${ctx.req.file.filename}`
+      url: `${serverPath}/images/album${ctx.request.query.keyid?'/'+ctx.request.query.keyid:''}/${ctx.req.file.filename}`
     }
   }
 })

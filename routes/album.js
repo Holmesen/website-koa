@@ -18,4 +18,15 @@ router.post('/upload', async(ctx, next)=> {
   }
 })
 
+router.get('/get-list', async(ctx, next)=> {
+  await next()
+  const query = ctx.request.query
+  let res = await album.getList(query)
+  if(res) {
+    ctx.body = res
+  } else {
+    ctx.body = {success: false, message: '', data: null}
+  }
+})
+
 module.exports = router
