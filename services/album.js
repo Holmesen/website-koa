@@ -14,6 +14,15 @@ album.upload = async (data)=> {
   }
 }
 
+album.update = async (data)=> {
+  const result = await albumM.update(data)
+  if(result.affectedRows>0) {
+    return {success: true, message: '相册更新成功！', data: null}
+  } else {
+    return {success: false, message: '相册更新失败！', data: null}
+  }
+}
+
 album.getList = async (data)=> {
   const result = await albumM.getList(data)
   if(result && result.length>0) {

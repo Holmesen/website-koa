@@ -10,6 +10,27 @@ album.upload = (data)=> {
    ,${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")} ,'${data.description||''}' ,${data.views||0} ,${data.updateTime?("'"+data.updateTime+"'"):null})`)
 }
 
+album.update = (data)=> {
+  let str = ""
+  if(data.isPublic) {
+    str += `isPublic='${data.isPublic}',`
+  }
+  if(data.photos) {
+    str += `photos='${data.photos}',`
+  }
+  if(data.name) {
+    str += `name='${data.name}',`
+  }
+  if(data.tags) {
+    str += `tags='${data.tags}',`
+  }
+  if(data.description) {
+    str += `description='${data.description}',`
+  }
+  if(str) {str = str.substring(0,str.length-1)}
+  return sql(`UPDATE album SET ${str} WHERE keyid='${data.keyid}'`)
+}
+
 album.getList = (data)=> {
   let str = ""
   if(data) {
