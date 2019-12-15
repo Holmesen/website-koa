@@ -43,4 +43,22 @@ router.get('/get-list', async(ctx, next)=> {
   }
 })
 
+router.delete('/delete/:id', async(ctx, next)=> {
+  await next()
+  if(!ctx.params.id) {
+    ctx.body = {success: false, message: '请传需要删除的相册id', data: null}
+  } else {
+    if(ctx.params.id.length!==16) {
+      ctx.body = {success: false, message: '请传正确的相册id', data: null}
+      return
+    }
+    ctx.body = await album.delete(ctx.params.id)
+  }
+})
+
+router.get('/photos', async(ctx, next)=> {
+  await next()
+  ctx.body = await album.getPhotos()
+})
+
 module.exports = router

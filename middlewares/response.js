@@ -4,8 +4,9 @@ const responseHandler = ctx => {
   if(ctx.success) {
     ctx.type = 'json'
     ctx.body = {
+      success: true,
       code: 200,
-      msg: ctx.msg || '',
+      message: ctx.msg || '',
       data: ctx.result
     }
   }
@@ -18,9 +19,10 @@ const errorHandler = (ctx, next) => {
       logger.error(err.stack)
     }
     ctx.body = {
+      success: false,
       code: err.code || -1,
       data: null,
-      msg: err.message.trim()
+      message: err.message.trim()
     }
     // 保证返回状态是 200
     ctx.status = 200

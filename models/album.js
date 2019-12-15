@@ -34,6 +34,9 @@ album.update = (data)=> {
 album.getList = (data)=> {
   let str = ""
   if(data) {
+    if(data.keyid) {
+      str += ` keyid='${data.keyid}' AND`
+    }
     if(data.ukeyid) {
       str += ` ukeyid='${data.ukeyid}' AND`
     }
@@ -53,11 +56,19 @@ album.getList = (data)=> {
         str += ` FIND_IN_SET('${item.trim()}', tags) AND`
       })
     }
-    if(data.isPublic || data.ukeyid || data.date || data.name || data.tags) {
+    if(!!str) {
       str = str.substring(0,str.length-3)
     }
   }
   return sql(`SELECT * FROM album ${str? 'WHERE '+str : ''} ORDER BY date ASC`)
+}
+
+album.delete = (data)=> {
+  return sql(`DELETE FROM album WHERE keyid='${data}'`)
+}
+
+album.getPhotos = ()=> {
+  return sql(`SELECT keyid,ukeyid,photos FROM album WHERE isPublic='Y' ORDER BY rand()`)
 }
 
 module.exports = album
