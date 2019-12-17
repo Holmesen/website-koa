@@ -99,6 +99,27 @@ router.post('/release', async(ctx, next)=> {
   }
 })
 
+router.put('/update', async(ctx, next)=> {
+  await next()
+  if(!ctx.request.body) {
+    ctx.body = {success: false, message: '没有传入数据！', data: null}
+  } else {
+    if(!ctx.request.body.blogData) {
+      ctx.body = {success: false, message: '请传参数 blogData', data: null}
+    } else {
+      // decodeJWT(ctx, next())
+      // if(ctx.jwtData) {
+      //   let res = await blog.release(Object.assign(JSON.parse(ctx.request.body.blogData), {ukeyid: ctx.jwtData.keyid || ''}))
+      //   ctx.body = res
+      // } else {
+      //   ctx.body = {success: false, message: 'token身份验证失败！', data: null}
+      // }
+      let res = await blog.update(JSON.parse(ctx.request.body.blogData))
+      ctx.body = res
+    }
+  }
+})
+
 // 根据博客id去查找博客
 router.get('/get-idlist', async(ctx, next)=> {
   await next()
