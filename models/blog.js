@@ -69,6 +69,34 @@ blog.release = (data)=> {
    ,${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")} ,'${data.place||''}' ,'${data.weather||''}' ,'${data.content||''}' ,${data.views||0} ,${data.zan||0} ,${data.cai||0} , ${data.collect||0}, ${data.share||0}, ${data.updateTime?("'"+data.updateTime+"'"):null})`)
 }
 
+blog.update = (data)=> {
+  let str = ""
+  if(data.title) {
+    str += `title='${data.title}',`
+  }
+  if(data.place) {
+    str += `place='${data.place}',`
+  }
+  if(data.weather) {
+    str += `weather='${data.weather}',`
+  }
+  if(data.category) {
+    str += `category='${data.category}',`
+  }
+  if(data.content) {
+    str += `content='${data.content}',`
+  }
+  if(data.updateTime) {
+    str += `updateTime='${data.updateTime}',`
+  }
+  if(str) {str = str.substring(0,str.length-1)}
+  return sql(`UPDATE blog SET ${str} WHERE keyid='${data.keyid}'`)
+}
+
+blog.delete = (data)=> {
+  return sql(`DELETE FROM blog WHERE keyid='${data}'`)
+}
+
 blog.getBlogById = (data)=> {
   let str = ""
   data.forEach(item => {

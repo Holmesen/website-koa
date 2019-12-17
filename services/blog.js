@@ -1,5 +1,6 @@
 const blogM = require('../models').blog
 const subArr2Str = require('../utils').subArr2Str
+const getTheDate = require('../utils').getTheDate
 const Decrypt = require('../utils/crypto').Decrypt
 const Encrypt = require('../utils/crypto').Encrypt
 
@@ -76,6 +77,25 @@ blog.release = async (data)=> {
     return {success: true, message: '博客发布成功！', data: null}
   } else {
     return {success: false, message: '博客发布失败！', data: null}
+  }
+}
+
+blog.update = async (data)=> {
+  data.updateTime = getTheDate()
+  const result = await blogM.update(data)
+  if(result.affectedRows>0) {
+    return {success: true, message: '博客更新成功！', data: null}
+  } else {
+    return {success: false, message: '博客更新失败！', data: null}
+  }
+}
+
+blog.delete = async(data)=> {
+  const result = await blogM.delete(data)
+  if(result.affectedRows>0) {
+    return {success: true, message: '博客删除成功！', data: null}
+  } else {
+    return {success: false, message: '博客删除失败！', data: null}
   }
 }
 
