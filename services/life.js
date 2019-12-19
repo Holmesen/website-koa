@@ -14,6 +14,25 @@ life.release = async (data)=> {
   }
 }
 
+life.update = async (data)=> {
+  data.updateTime = getTheDate()
+  const result = await lifeM.update(data)
+  if(result.affectedRows>0) {
+    return {success: true, message: '记事更新成功！', data: null}
+  } else {
+    return {success: false, message: '记事更新失败！', data: null}
+  }
+}
+
+life.delete = async(data)=> {
+  const result = await lifeM.delete(data)
+  if(result.affectedRows>0) {
+    return {success: true, message: '记事删除成功！', data: null}
+  } else {
+    return {success: false, message: '记事删除失败！', data: null}
+  }
+}
+
 life.getLifeById = async(data)=> {
   data = unescape(data)
   data = data.replace(/\[/g,'').replace(/\]/g,'')

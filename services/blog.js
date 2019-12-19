@@ -99,16 +99,6 @@ blog.delete = async(data)=> {
   }
 }
 
-blog.update = async (data)=> {
-  data.updateTime = getTheDate()
-  const result = await blogM.release(data)
-  if(result.affectedRows>0) {
-    return {success: true, message: '博客更新成功！', data: null}
-  } else {
-    return {success: false, message: '博客更新失败！', data: null}
-  }
-}
-
 blog.getBlogById = async(data)=> {
   data = unescape(data)
   data = data.replace(/\[/g,'').replace(/\]/g,'')

@@ -22,6 +22,40 @@ router.get('/getLife', async(ctx, next)=> {
   }
 })
 
+router.put('/update', async(ctx, next)=> {
+  await next()
+  if(!ctx.request.body) {
+    ctx.body = {success: false, message: '没有传入数据！', data: null}
+  } else {
+    if(!ctx.request.body.lifeData) {
+      ctx.body = {success: false, message: '请传参数 lifeData', data: null}
+    } else {
+      // decodeJWT(ctx, next())
+      // if(ctx.jwtData) {
+      //   let res = await life.release(Object.assign(JSON.parse(ctx.request.body.lifeData), {ukeyid: ctx.jwtData.keyid || ''}))
+      //   ctx.body = res
+      // } else {
+      //   ctx.body = {success: false, message: 'token身份验证失败！', data: null}
+      // }
+      let res = await life.update(JSON.parse(ctx.request.body.lifeData))
+      ctx.body = res
+    }
+  }
+})
+
+router.delete('/delete/:id', async(ctx, next)=> {
+  await next()
+  if(!ctx.params.id) {
+    ctx.body = {success: false, message: '请传需要删除的记事id', data: null}
+  } else {
+    if(ctx.params.id.length!==16) {
+      ctx.body = {success: false, message: '请传正确的记事id', data: null}
+      return
+    }
+    ctx.body = await life.delete(ctx.params.id)
+  }
+})
+
 router.post('/addLife', async(ctx, next)=> {
   await next()
   if(!ctx.request.body) {
