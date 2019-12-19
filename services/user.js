@@ -54,7 +54,7 @@ user.login = async (data)=> {
   const result = await userM.login(data)
   if(result && result.length>0) {
     var token = jwt.sign(
-      {name: data.name||'', pwd: Encrypt(data.pwd)||'', keyid: data.keyid}, 
+      {name: data.name||'', pwd: Encrypt(data.pwd)||'', keyid: result[0].keyid}, 
       config.secret, 
       {
         algorithm: 'HS256',

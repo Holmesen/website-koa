@@ -1,5 +1,6 @@
 const lifeM = require('../models').life
 const subArr2Str = require('../utils').subArr2Str
+const getTheDate = require('../utils').getTheDate
 const Decrypt = require('../utils/crypto').Decrypt
 const Encrypt = require('../utils/crypto').Encrypt
 
