@@ -118,4 +118,14 @@ router.get('/get-info', async(ctx, next)=> {
   }
 })
 
+router.get('/get-assets', async(ctx, next)=> {
+  await next()
+  const query = ctx.request.query
+  if(!query.ukeyid) {
+    ctx.body = {success: false, message: '请传用户id！', data: null}
+  } else {
+    ctx.body = await user.getAssets(query)
+  }
+})
+
 module.exports = router

@@ -137,4 +137,8 @@ user.getInfo = (data)=> {
   return sql(`SELECT name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
 }
 
+// user.getCollect = (data)=> {
+//   return sql(``)
+// }
+
 module.exports = user

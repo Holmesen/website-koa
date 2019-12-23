@@ -1,4 +1,7 @@
 const userM = require('../models').user
+const blogM = require('../models').blog
+const lifeM = require('../models').life
+const albumM = require('../models').album
 const jwt = require('jsonwebtoken')
 const config = require('../config')
 const Decrypt = require('../utils/crypto').Decrypt
@@ -84,6 +87,32 @@ user.getInfo = async (jwtData)=> {
     return {success: true, message: '获取用户信息成功！', data: result}
   } else {
     return {success: false, message: '获取用户信息失败！', data: null}
+  }
+}
+
+user.getAssets = async (query)=> {
+  let result = {}
+  let tags = []
+  if(!query.tag) {
+    tags = ["blog", "life", "album", "collect"]
+  }
+  if(tags.indexOf("blog") !== -1) {
+    result["blog"] = await blogM.getBlog({ukeyid:query.ukeyid})
+  }
+  if(tags.indexOf("life") !== -1) {
+    result["life"] = await lifeM.getLife({ukeyid:query.ukeyid})
+  }
+  if(tags.indexOf("album") !== -1) {
+    result["album"] = await albumM.getList({ukeyid:query.ukeyid})
+  }
+  // if(tags.indexOf("collect")) {
+  //   result["collect"] = await userM.getCollect({ukeyid:query.ukeyid})
+  // }
+  // const result = await userM.getAssets(query)
+  if(result) {
+    return {success: true, message: '', data: result}
+  } else {
+    return {success: false, message: '', data: null}
   }
 }
 
