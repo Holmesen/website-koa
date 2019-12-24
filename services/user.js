@@ -95,6 +95,10 @@ user.getAssets = async (query)=> {
   let tags = []
   if(!query.tag) {
     tags = ["blog", "life", "album", "collect"]
+  } else {
+    query.tag = unescape(query.tag)
+    query.tag = query.tag.replace(/\[/g,'').replace(/\]/g,'')
+    tags = query.tag = query.tag.split(",")
   }
   if(tags.indexOf("blog") !== -1) {
     result["blog"] = await blogM.getBlog({ukeyid:query.ukeyid})
@@ -105,10 +109,18 @@ user.getAssets = async (query)=> {
   if(tags.indexOf("album") !== -1) {
     result["album"] = await albumM.getList({ukeyid:query.ukeyid})
   }
-  // if(tags.indexOf("collect")) {
-  //   result["collect"] = await userM.getCollect({ukeyid:query.ukeyid})
+  if(tags.indexOf("collect") !== -1) {
+    result["collect"] = await userM.getRecord({ukeyid:query.ukeyid, tag:'collect'})
+  }
+  // if(tags.indexOf("views") !== -1) {
+  //   result["views"] = await userM.getRecord({ukeyid:query.ukeyid, tag:'views'})
   // }
-  // const result = await userM.getAssets(query)
+  // if(tags.indexOf("cai") !== -1) {
+  //   result["cai"] = await userM.getRecord({ukeyid:query.ukeyid, tag:'cai'})
+  // }
+  // if(tags.indexOf("zan") !== -1) {
+  //   result["zan"] = await userM.getRecord({ukeyid:query.ukeyid, tag:'zan'})
+  // }
   if(result) {
     return {success: true, message: '', data: result}
   } else {

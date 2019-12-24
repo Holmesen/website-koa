@@ -137,8 +137,9 @@ user.getInfo = (data)=> {
   return sql(`SELECT name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
 }
 
-// user.getCollect = (data)=> {
-//   return sql(``)
-// }
+user.getRecord = (data)=> {
+  return sql(`SELECT keyid, title, content, 'blog' AS tag FROM blog WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')
+    UNION SELECT keyid, title, content, 'life' AS tag FROM life WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')`)
+}
 
 module.exports = user
