@@ -4,6 +4,10 @@ const key = CryptoJS.enc.Utf8.parse("F45047D200A5BE77")  //十六位十六进制
 const iv = CryptoJS.enc.Utf8.parse('7EFD45046ACBA58F')   //十六位十六进制数作为密钥偏移量
 
 //解密方法
+/**
+ * 解密
+ * @param {String} word 要解密的字符串
+ */
 function Decrypt(word) {
   let encryptedHexStr = CryptoJS.enc.Hex.parse(word)
   let srcs = CryptoJS.enc.Base64.stringify(encryptedHexStr)
@@ -13,6 +17,10 @@ function Decrypt(word) {
 }
 
 //加密方法
+/**
+ * 加密
+ * @param {String} word 要加密的字符串
+ */
 function Encrypt(word) {
   let srcs = CryptoJS.enc.Utf8.parse(word)
   let encrypted = CryptoJS.AES.encrypt(srcs, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 })

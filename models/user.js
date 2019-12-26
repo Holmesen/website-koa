@@ -137,9 +137,41 @@ user.getInfo = (data)=> {
   return sql(`SELECT name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
 }
 
+user.getUserById = (data)=> {
+  return sql(`SELECT * FROM user WHERE keyid='${data.ukeyid}'`)
+}
+
 user.getRecord = (data)=> {
   return sql(`SELECT keyid, title, content, date, updateTime, 'blog' AS tag FROM blog WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')
     UNION SELECT keyid, title, content, date, updateTime, 'life' AS tag FROM life WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')`)
+}
+
+user.checkUser = (data)=> {
+  return sql(`SELECT pwd, name FROM user WHERE keyid='${data.ukeyid}'`)
+}
+
+user.updateInfo = (data)=> {
+  let str = ''
+  if(data.avatar) {
+    str += `avatar='${data.avatar}',`
+  }
+  if(data.name) {
+    str += `name='${data.name}',`
+  }
+  if(data.pwd && data.pwd.pwdNew) {
+    str += `pwd='${data.pwd.pwdNew}',`
+  }
+  if(data.sex) {
+    str += `sex='${data.sex}',`
+  }
+  if(data.birthday) {
+    str += `birthday='${data.birthday}',`
+  }
+  if(data.intro) {
+    str += `intro='${data.intro}',`
+  }
+  if(str) {str = str.substring(0,str.length-1)}
+  return sql(`UPDATE user SET ${str} WHERE keyid='${data.ukeyid}'`)
 }
 
 module.exports = user

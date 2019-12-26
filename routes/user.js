@@ -128,4 +128,22 @@ router.get('/get-assets', async(ctx, next)=> {
   }
 })
 
+router.put('/update-info', async(ctx, next)=> {
+  await next()
+  if(!ctx.request.body) {
+    ctx.body = {success: false, message: '没有传入数据！', data: null}
+  } else {
+    if(!ctx.request.body.data) {
+      ctx.body = {success: false, message: '请传参数 data', data: null}
+    } else {
+      if(!JSON.parse(ctx.request.body.data).ukeyid) {
+        ctx.body = {success: false, message: '请传用户id', data: null}
+      } else {
+        let res = await user.updateInfo(JSON.parse(ctx.request.body.data))
+        ctx.body = res
+      }
+    }
+  }
+})
+
 module.exports = router
