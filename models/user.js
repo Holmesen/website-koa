@@ -138,8 +138,8 @@ user.getInfo = (data)=> {
 }
 
 user.getRecord = (data)=> {
-  return sql(`SELECT keyid, title, content, 'blog' AS tag FROM blog WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')
-    UNION SELECT keyid, title, content, 'life' AS tag FROM life WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')`)
+  return sql(`SELECT keyid, title, content, date, updateTime, 'blog' AS tag FROM blog WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')
+    UNION SELECT keyid, title, content, date, updateTime, 'life' AS tag FROM life WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')`)
 }
 
 module.exports = user

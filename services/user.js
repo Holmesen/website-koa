@@ -107,7 +107,22 @@ user.getAssets = async (query)=> {
     result["life"] = await lifeM.getLife({ukeyid:query.ukeyid})
   }
   if(tags.indexOf("album") !== -1) {
-    result["album"] = await albumM.getList({ukeyid:query.ukeyid})
+    let res = await albumM.getList({ukeyid:query.ukeyid})
+    if(res && res.length>0) {
+      res.forEach(el => {
+        el.tags = el.tags.split(',')
+        el.photos = el.photos.split("},")
+        let list = []
+        el.photos.forEach((el2,idx) => {
+          if(idx!==el.photos.length-1) {
+            el2 = el2 + "}"
+          }
+          list.push(JSON.parse(el2))
+        })
+        el.photos = list
+      })
+    }
+    result["album"] = res || []
   }
   if(tags.indexOf("collect") !== -1) {
     result["collect"] = await userM.getRecord({ukeyid:query.ukeyid, tag:'collect'})
