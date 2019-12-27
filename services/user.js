@@ -81,7 +81,9 @@ user.signup = async (data)=> {
 }
 
 user.getInfo = async (jwtData)=> {
-  jwtData.pwd = Decrypt(jwtData.pwd)
+  if(jwtData.pwd) {
+    jwtData.pwd = Decrypt(jwtData.pwd)
+  }
   const result = await userM.getInfo(jwtData)
   if(result && result.length>0) {
     return {success: true, message: '获取用户信息成功！', data: result}
@@ -149,30 +151,27 @@ user.updateInfo = async (data)=> {
     data.pwd.pwdNew = Decrypt(data.pwd.pwdNew)
     let res0 = await userM.checkUser(data)
     if(res0[0].pwd !== data.pwd.pwdOld) {
-      console.log("datadata: ",data)
-      console.log("data.pwd: ",data.pwd)
-      console.log("data.pwd.pwdOld: ",data.pwd.pwdOld)
       return {success: false, message: '原密码错误！', data: null}
     }
-    let result = await userM.updateInfo(data)
-    if(result.affectedRows>0) {
-      let res = await userM.getUserById(data)
-      if(res && res.length>0) {
-        var token = jwt.sign(
-          {name: res[0].name, pwd: Encrypt(res[0].pwd), keyid: res[0].keyid}, 
-          config.secret, 
-          {
-            algorithm: 'HS256',
-            expiresIn: '2h'
-          }
-        )
-        return {success: true, message: '信息修改成功！', data: Object.assign({token}, res[0])}
-      } else {
-        return {success: true, message: '获取用户信息失败！', data: null}
-      }
+  }
+  let result = await userM.updateInfo(data)
+  if(result.affectedRows>0) {
+    let res = await userM.getUserById(data)
+    if(res && res.length>0) {
+      var token = jwt.sign(
+        {name: res[0].name, pwd: Encrypt(res[0].pwd), keyid: res[0].keyid}, 
+        config.secret, 
+        {
+          algorithm: 'HS256',
+          expiresIn: '2h'
+        }
+      )
+      return {success: true, message: '信息修改成功！', data: Object.assign({token}, res[0])}
     } else {
-      return {success: false, message: '信息修改失败！', data: null}
+      return {success: false, message: '获取用户信息失败！', data: null}
     }
+  } else {
+    return {success: false, message: '信息修改失败！', data: null}
   }
 }
 

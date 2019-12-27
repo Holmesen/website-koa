@@ -134,7 +134,7 @@ user.signup = (data)=> {
 }
 
 user.getInfo = (data)=> {
-  return sql(`SELECT name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
+  return sql(`SELECT keyid, name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE ${data.keyid?("keyid='"+data.keyid+"'"):("name='"+data.name+"' AND pwd='"+data.pwd+"'")}`)
 }
 
 user.getUserById = (data)=> {
@@ -168,7 +168,7 @@ user.updateInfo = (data)=> {
     str += `birthday='${data.birthday}',`
   }
   if(data.intro) {
-    str += `intro='${data.intro}',`
+    str += `introduction='${data.intro}',`
   }
   if(str) {str = str.substring(0,str.length-1)}
   return sql(`UPDATE user SET ${str} WHERE keyid='${data.ukeyid}'`)
