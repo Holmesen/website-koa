@@ -175,4 +175,15 @@ user.updateInfo = async (data)=> {
   }
 }
 
+user.unoperate = async (data)=> {
+  // let result = await userM.unoperate(data)
+  let obj = {ukeyid: data.ukeyid, ckeyid: data.bkeyid || data.lkeyid, type: data.type, tag: "0"}
+  let result = null
+  switch(data.type) {
+    case "blog": result = await blogM.operate(obj); break
+    case "life": result = await lifeM.operate(obj); break
+    default : return {success: false, message: '操作失败！', data: result}
+  }
+}
+
 module.exports = user

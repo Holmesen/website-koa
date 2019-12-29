@@ -5,9 +5,9 @@ const getTheDate = require('../utils').getTheDate
 const life = {}
 
 life.release = (data)=> {
-  return sql(`INSERT INTO life(keyid, category, title, ukeyid, user, date, place, weather, content, views, zan, cai, collect, share, updateTime)
-  VALUES('${randomString(16)}' ,'${data.category||[]}' ,'${data.title||''}' ,'${data.ukeyid||''}' ,'${data.user||''}'
-   ,${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")} ,'${data.place||''}' ,'${data.weather||''}' ,'${data.content||''}' ,${data.views||0} ,${data.zan||0} ,${data.cai||0} , ${data.collect||0}, ${data.share||0}, ${data.updateTime?("'"+data.updateTime+"'"):null})`)
+  return sql(`INSERT INTO life(keyid, category, title, ukeyid, date, place, weather, content, views, zan, cai, collect, share, updateTime)
+  VALUES('${randomString(16)}' ,'${data.category||[]}' ,'${data.title||''}' ,'${data.ukeyid||''}' ,${data.date?("'"+data.date+"'"):("'"+getTheDate()+"'")} ,
+  '${data.place||''}' ,'${data.weather||''}' ,'${data.content||''}' ,${data.views||0} ,${data.zan||0} ,${data.cai||0} , ${data.collect||0}, ${data.share||0}, ${data.updateTime?("'"+data.updateTime+"'"):null})`)
 }
 
 life.update = (data)=> {
@@ -41,39 +41,36 @@ life.delete = (data)=> {
 life.getLifeById = (data)=> {
   let str = ""
   data.forEach(item => {
-    str += ` keyid='${item.trim()}' OR`
+    str += ` a.keyid='${item.trim()}' OR`
   })
   str = str.substring(0,str.length-2)
-  return sql(`SELECT * FROM life WHERE ${str} ORDER BY date ASC`)
+  return sql(`SELECT a.*, b.name as user FROM life a LEFT JOIN user b ON b.keyid = a.ukeyid WHERE ${str} ORDER BY a.date ASC`)
 }
 
 life.getLife = (data)=> {
   let str = ""
   if(data) {
-    if(data.user) {
-      str += ` user='${data.user}' AND`
-    }
     if(data.ukeyid) {
-      str += ` ukeyid='${data.ukeyid}' AND`
+      str += ` a.ukeyid='${data.ukeyid}' AND`
     }
     if(data.date) {
-      str += ` date='${data.date}' AND`
+      str += ` a.date='${data.date}' AND`
     }
     if(data.title) {
-      str += ` title='${data.title}' AND`
+      str += ` a.title='${data.title}' AND`
     }
     if(data.category) {
       data.category = (data.category).replace(/\[/g,'').replace(/\]/g,'').replace(/\'/g,'').replace(/\"/g,'')
       let list = (data.category).split(",")
       list.forEach(item => {
-        str += ` FIND_IN_SET('${item.trim()}', category) AND`
+        str += ` FIND_IN_SET('${item.trim()}', a.category) AND`
       })
     }
-    if(data.user || data.ukeyid || data.date || data.title || data.category) {
+    if(data.ukeyid || data.date || data.title || data.category) {
       str = str.substring(0,str.length-3)
     }
   }
-  return sql(`SELECT * FROM life ${str? 'WHERE '+str : ''} ORDER BY date ASC`)
+  return sql(`SELECT a.*, b.name as user FROM life a LEFT JOIN user b ON b.keyid = a.ukeyid ${str? 'WHERE '+str : ''} ORDER BY a.date ASC`)
 }
 
 life.operate = (data)=> {

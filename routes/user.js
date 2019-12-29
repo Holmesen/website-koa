@@ -146,4 +146,18 @@ router.put('/update-info', async(ctx, next)=> {
   }
 })
 
+router.get('/unoperate', async(ctx, next)=> {
+  await next()
+  const query = ctx.request.query
+  if(!query.ukeyid) {
+    ctx.body = {success: false, message: '请传用户id！', data: null}
+    return
+  }
+  if(!query.type) {
+    ctx.body = {success: false, message: '请传操作类型！', data: null}
+    return
+  }
+  ctx.body = await user.unoperate(query)
+})
+
 module.exports = router
