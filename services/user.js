@@ -71,7 +71,7 @@ user.login = async (data)=> {
 }
 
 user.signup = async (data)=> {
-  data.pwd = Encrypt(data.pwd)
+  data.pwd = Decrypt(data.pwd)
   const result = await userM.signup(data)
   if(result.affectedRows>0) {
     return {success: true, message: '注册成功！', data: null}
