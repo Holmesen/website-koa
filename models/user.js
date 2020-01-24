@@ -124,7 +124,7 @@ user.delete = (conditionMap)=> {
 
 user.login = (data)=> {
   // return sql(`SELECT COUNT(*) FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
-  return sql(`SELECT keyid, name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
+  return sql(`SELECT keyid, name, sex, birthday, avatar, introduction, DATE_FORMAT(date,'%Y-%m-%d %T') AS date, DATE_FORMAT(updateTime,'%Y-%m-%d %T') AS updateTime FROM user WHERE name='${data.name}' AND pwd='${data.pwd}'`)
 }
 
 user.signup = (data)=> {
@@ -134,7 +134,7 @@ user.signup = (data)=> {
 }
 
 user.getInfo = (data)=> {
-  return sql(`SELECT keyid, name, sex, birthday, avatar, introduction, date, updateTime FROM user WHERE ${data.keyid?("keyid='"+data.keyid+"'"):("name='"+data.name+"' AND pwd='"+data.pwd+"'")}`)
+  return sql(`SELECT keyid, name, sex, birthday, avatar, introduction, DATE_FORMAT(date,'%Y-%m-%d %T') AS date, DATE_FORMAT(updateTime,'%Y-%m-%d %T') AS updateTime FROM user WHERE ${data.keyid?("keyid='"+data.keyid+"'"):("name='"+data.name+"' AND pwd='"+data.pwd+"'")}`)
 }
 
 user.getUserById = (data)=> {
@@ -142,8 +142,8 @@ user.getUserById = (data)=> {
 }
 
 user.getRecord = (data)=> {
-  return sql(`SELECT keyid, title, content, date, updateTime, 'blog' AS tag FROM blog WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')
-    UNION SELECT keyid, title, content, date, updateTime, 'life' AS tag FROM life WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')`)
+  return sql(`SELECT keyid, title, content, DATE_FORMAT(date,'%Y-%m-%d %T') AS date, DATE_FORMAT(updateTime,'%Y-%m-%d %T') AS updateTime, 'blog' AS tag FROM blog WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')
+    UNION SELECT keyid, title, content, DATE_FORMAT(date,'%Y-%m-%d %T') AS date, DATE_FORMAT(updateTime,'%Y-%m-%d %T') AS updateTime, 'life' AS tag FROM life WHERE keyid IN (SELECT tkeyid FROM record WHERE type='${data.tag}' AND ukeyid='${data.ukeyid}')`)
 }
 
 user.checkUser = (data)=> {
