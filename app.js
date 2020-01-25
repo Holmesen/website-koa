@@ -3,7 +3,6 @@ const koaBodyparser = require('koa-bodyparser')
 const koaStatic = require('koa-static')
 const path = require('path')
 const koaCors = require('koa2-cors')
-const routes = require('./routes/public')
 const uploadRoutes = require('./routes/uploadFile')
 const userRoutes = require('./routes/user')
 const blogRoutes = require('./routes/blog')
@@ -34,9 +33,6 @@ app.use(koaCors(corsHandler))
 
 // JWT验证
 // app.use(jwtMiddleware.unless({ path: [/^\/public/] }))
-
-app.use(routes.routes())
-app.use(routes.allowedMethods())
 
 // 上传文件路由
 app.use(uploadRoutes.routes())

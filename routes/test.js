@@ -1,21 +1,26 @@
 const Router = require('koa-router')
 const router = new Router()
-const test = require('../services').test
-const {jwtMiddleware, decodeJWT} = require('../middlewares/jwt')
+// const test = require('../services').test
+// const {jwtMiddleware, decodeJWT} = require('../middlewares/jwt')
 
 router.prefix('/test')
 // router.use(jwtMiddleware)
-router.post('/verify-token', async(ctx, next)=> {
-  await next()
-  // var res = await test.verifyToken(ctx, next)
-  // var res = await decodeJWT(ctx, next)
-  await new Promise((resolve, reject)=> {
-    decodeJWT()
-  }).then(res=>{
-    console.log('res: ', res)
-    console.log('ctx: ', ctx)
-  }).finally(()=>{ctx.body = {}})
+// router.post('/verify-token', async(ctx, next)=> {
+//   await next()
+//   // var res = await test.verifyToken(ctx, next)
+//   // var res = await decodeJWT(ctx, next)
+//   await new Promise((resolve, reject)=> {
+//     decodeJWT()
+//   }).then(res=>{
+//     console.log('res: ', res)
+//     console.log('ctx: ', ctx)
+//   }).finally(()=>{ctx.body = {}})
   
+// })
+
+router.get('/', async(ctx, next)=>{
+  await next()
+  ctx.body = "请求成功！"
 })
 
 module.exports = router
