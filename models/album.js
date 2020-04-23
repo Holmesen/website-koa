@@ -35,32 +35,35 @@ album.getList = (data)=> {
   let str = ""
   if(data) {
     if(data.keyid) {
-      str += ` keyid='${data.keyid}' AND`
+      str += ` AND keyid='${data.keyid}'`
     }
     if(data.ukeyid) {
-      str += ` ukeyid='${data.ukeyid}' AND`
+      str += ` AND ukeyid='${data.ukeyid}'`
     }
     if(data.isPublic) {
-      str += ` isPublic='${data.isPublic}' AND`
+      str += ` AND isPublic='${data.isPublic}'`
     }
     if(data.date) {
-      str += ` date='${data.date}' AND`
+      str += ` AND date='${data.date}'`
     }
     if(data.name) {
-      str += ` name='${data.name}' AND`
+      str += ` AND name='${data.name}'`
+    }
+    if(!data.limit || data.limit<1) {
+      data.limit = 10
+    }
+    if(!data.offset || data.offset<0) {
+      data.offset = 0
     }
     if(data.tags) {
       data.tags = (data.tags).replace(/\[/g,'').replace(/\]/g,'').replace(/\'/g,'').replace(/\"/g,'')
       let list = (data.tags).split(",")
       list.forEach(item => {
-        str += ` FIND_IN_SET('${item.trim()}', tags) AND`
+        str += ` AND FIND_IN_SET('${item.trim()}', tags)`
       })
     }
-    if(!!str) {
-      str = str.substring(0,str.length-3)
-    }
   }
-  return sql(`SELECT * FROM album ${str? 'WHERE '+str : ''} ORDER BY date ASC`)
+  return sql(`SELECT * FROM album WHERE 1=1 ${str} ORDER BY date ASC LIMIT ${data.limit} OFFSET ${data.offset}`)
 }
 
 album.delete = (data)=> {

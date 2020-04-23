@@ -24,6 +24,15 @@ album.update = async (data)=> {
 }
 
 album.getList = async (data)=> {
+  if(!data) {
+    data = {}
+  }
+  if(!data.limit || data.limit<1) {
+    data.limit = 10
+  }
+  if(!data.offset || data.offset<0) {
+    data.offset = 0
+  }
   const result = await albumM.getList(data)
   if(result && result.length>0) {
     result.forEach(el => {

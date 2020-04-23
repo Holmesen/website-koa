@@ -8,6 +8,7 @@ const userRoutes = require('./routes/user')
 const blogRoutes = require('./routes/blog')
 const lifeRoutes = require('./routes/life')
 const albumRoutes = require('./routes/album')
+const messageRoutes = require('./routes/message')
 const testRoutes = require('./routes/test')
 
 const {loggerMiddleware} = require('./middlewares/logger')
@@ -53,6 +54,10 @@ app.use(lifeRoutes.allowedMethods())
 // 相册相关路由
 app.use(albumRoutes.routes())
 app.use(albumRoutes.allowedMethods())
+
+// 消息相关路由
+app.use(messageRoutes.routes())
+app.use(messageRoutes.allowedMethods())
 
 // 测试用路由
 app.use(testRoutes.routes())

@@ -110,6 +110,7 @@ router.post('/signup', async(ctx, next)=> {
 router.get('/get-info', async(ctx, next)=> {
   await next()
   decodeJWT(ctx, next())
+  debugger
   if(ctx.jwtData) {
     let res = await user.getInfo(ctx.jwtData)
     ctx.body = res

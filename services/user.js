@@ -95,6 +95,12 @@ user.getInfo = async (jwtData)=> {
 user.getAssets = async (query)=> {
   let result = {}
   let tags = []
+  if(!query.limit || query.limit<1) {
+    query.limit = 10
+  }
+  if(!query.offset || query.offset<0) {
+    query.offset = 0
+  }
   if(!query.tag) {
     tags = ["blog", "life", "album", "collect"]
   } else {
@@ -103,13 +109,13 @@ user.getAssets = async (query)=> {
     tags = query.tag = query.tag.split(",")
   }
   if(tags.indexOf("blog") !== -1) {
-    result["blog"] = await blogM.getBlog({ukeyid:query.ukeyid})
+    result["blog"] = await blogM.getBlog({ukeyid:query.ukeyid, limit:query.limit, offset:query.offset})
   }
   if(tags.indexOf("life") !== -1) {
-    result["life"] = await lifeM.getLife({ukeyid:query.ukeyid})
+    result["life"] = await lifeM.getLife({ukeyid:query.ukeyid, limit:query.limit, offset:query.offset})
   }
   if(tags.indexOf("album") !== -1) {
-    let res = await albumM.getList({ukeyid:query.ukeyid})
+    let res = await albumM.getList({ukeyid:query.ukeyid, limit:query.limit, offset:query.offset})
     if(res && res.length>0) {
       res.forEach(el => {
         el.tags = el.tags.split(',')
@@ -127,7 +133,7 @@ user.getAssets = async (query)=> {
     result["album"] = res || []
   }
   if(tags.indexOf("collect") !== -1) {
-    result["collect"] = await userM.getRecord({ukeyid:query.ukeyid, tag:'collect'})
+    result["collect"] = await userM.getRecord({ukeyid:query.ukeyid, tag:'collect', limit:query.limit, offset:query.offset})
   }
   // if(tags.indexOf("views") !== -1) {
   //   result["views"] = await userM.getRecord({ukeyid:query.ukeyid, tag:'views'})
@@ -143,6 +149,10 @@ user.getAssets = async (query)=> {
   } else {
     return {success: false, message: '', data: null}
   }
+}
+
+user.getAssets2 = async (query)=> {
+
 }
 
 user.updateInfo = async (data)=> {

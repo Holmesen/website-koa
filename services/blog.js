@@ -118,8 +118,17 @@ blog.getBlogById = async(data)=> {
 }
 
 blog.getBlog = async(data)=> {
-  if(data && data.category) {
+  if(!data) {
+    data = {}
+  }
+  if(data.category) {
     data.category = unescape(data.category)
+  }
+  if(!data.limit || data.limit<1) {
+    data.limit = 10
+  }
+  if(!data.offset || data.offset<0) {
+    data.offset = 0
   }
   const result = await blogM.getBlog(data)
   // await blogM.record(data)

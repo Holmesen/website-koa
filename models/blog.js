@@ -110,26 +110,29 @@ blog.getBlog = (data)=> {
   let str = ""
   if(data) {
     if(data.ukeyid) {
-      str += ` a.ukeyid='${data.ukeyid}' AND`
+      str += ` AND a.ukeyid='${data.ukeyid}'`
     }
     if(data.date) {
-      str += ` a.date='${data.date}' AND`
+      str += ` AND a.date='${data.date}'`
     }
     if(data.title) {
-      str += ` a.title='${data.title}' AND`
+      str += ` AND a.title='${data.title}'`
+    }
+    if(!data.limit || data.limit<1) {
+      data.limit = 10
+    }
+    if(!data.offset || data.offset<0) {
+      data.offset = 0
     }
     if(data.category) {
       data.category = (data.category).replace(/\[/g,'').replace(/\]/g,'').replace(/\'/g,'').replace(/\"/g,'')
       let list = (data.category).split(",")
       list.forEach(item => {
-        str += ` FIND_IN_SET('${item.trim()}', a.category) AND`
+        str += ` AND FIND_IN_SET('${item.trim()}', a.category)`
       })
     }
-    if(data.ukeyid || data.date || data.title || data.category) {
-      str = str.substring(0,str.length-3)
-    }
   }
-  return sql(`SELECT a.*, b.name as user FROM blog a LEFT JOIN user b ON b.keyid = a.ukeyid ${str? 'WHERE '+str : ''} ORDER BY a.date ASC`)
+  return sql(`SELECT a.*, b.name as user FROM blog a LEFT JOIN user b ON b.keyid = a.ukeyid WHERE 1=1 ${str} ORDER BY a.date ASC LIMIT ${data.limit} OFFSET ${data.offset}`)
 }
 
 blog.operate = (data)=> {
